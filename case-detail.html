@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case Study — Lanceflows</title>
+<meta name="description" content="Detailed Lanceflows case study — the business problem, our technical role, the solution delivered, verified results, and the value created." />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="Lanceflows home">
+      <img class="logo-img" src="company_logo.png" alt="Lanceflows logo" />
+      <span class="brand-text">
+        <span class="brand-name">Lance<b>flows</b></span>
+        <span class="brand-tag">Software Engineering &amp; AI Services</span>
+      </span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Overview</a>
+      <a href="services.html">Services</a>
+      <a href="case-study.html" class="active">Case Studies</a>
+    </nav>
+    <div class="top-actions">
+      <a class="btn btn-primary" href="index.html#contact">Contact us</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== PAGE HERO (filled by JS) ===================== -->
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow" id="d-tag">Case study</span>
+      <h1 id="d-title">Loading…</h1>
+      <p id="d-summary"></p>
+      <div class="d-meta" id="d-meta"></div>
+    </div>
+  </section>
+
+  <!-- ===================== DETAIL BODY (filled by JS) ===================== -->
+  <section class="section case-detail">
+    <div class="wrap">
+      <div id="case-root" class="case-list"></div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section>
+    <div class="cta">
+      <h2>Have a problem like this?</h2>
+      <p>Tell us your goal and we'll turn it into a structured plan — from idea to stable, scalable reality.</p>
+      <a class="btn btn-ghost" href="index.html#contact">Contact us</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="favicon.png" alt="Lanceflows" width="549" height="383" style="width:160px;height:111.6px;display:block;border-radius:12px;margin-bottom:12px" />
+        <strong style="color:#fff;font-size:1.2rem">Lanceflows</strong>
+        <p>Talent, in flow. We help clients and talented people invest their strengths and earn the most — seamlessly.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col"><h4>Company</h4><a href="services.html">Services</a><a href="case-study.html">Case Studies</a><a href="index.html#about">About us</a><a href="index.html#contact">Contact</a></div>
+        <div class="foot-col"><h4>For clients</h4><a href="index.html#why-clients">Hire talent</a><a href="index.html#contact">Request a quote</a></div>
+        <div class="foot-col"><h4>For talent</h4><a href="index.html#why-talent">What's good?</a><a href="index.html#contact">Join us</a></div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Lanceflows. All rights reserved.</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of services</a>
+    </div>
+  </div>
+</footer>
+
+<script src="cases-data.js"></script>
+<script src="architectures.js"></script>
+<script>
+  function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function domain(url){ return String(url).replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,''); }
+
+  function step(s, i){
+    const tag = s.isBottleneck ? '<span class="tag-bottleneck">Bottleneck</span>' : '';
+    return '<div class="flow-step"><span class="fnum">' + (i + 1) + '</span>' +
+      '<b>' + esc(s.name) + tag + '</b>' +
+      '<div class="fmeta">' + esc(s.owner) + ' · ' + esc(s.duration) + '</div>' +
+      '<p>' + esc(s.notes) + '</p></div>';
+  }
+
+  // Render the case's hand-authored architecture (from architectures.js) as an
+  // SVG of icon tiles connected by labelled arrows — the finally shipped system.
+  function wrapLabel(s, max){
+    const words = String(s).split(/\s+/);
+    const lines = []; let cur = '';
+    words.forEach(w => {
+      if ((cur + ' ' + w).trim().length <= max) cur = (cur + ' ' + w).trim();
+      else { if (cur) lines.push(cur); cur = w; }
+    });
+    if (cur) lines.push(cur);
+    return lines.slice(0, 3);
+  }
+
+  function archDiagram(c){
+    const A = (typeof CASE_ARCH !== 'undefined') ? CASE_ARCH[c.id] : null;
+    if (!A || !A.nodes || !A.nodes.length) return '';
+
+    const PADX = 64, PADY = 24, COLG = 168, ROWG = 116, CHIP = 56, HALF = CHIP / 2;
+    const N = {}; let maxc = 0, maxr = 0;
+    A.nodes.forEach(n => {
+      const o = { id:n[0], label:n[1], icon:n[2], color:n[3], col:n[4], row:n[5] };
+      o.cx = PADX + o.col * COLG + HALF;
+      o.cy = PADY + o.row * ROWG + HALF;
+      N[o.id] = o;
+      maxc = Math.max(maxc, o.col); maxr = Math.max(maxr, o.row);
+    });
+    const W = PADX * 2 + maxc * COLG + CHIP;
+    const H = PADY + maxr * ROWG + CHIP + 54;
+
+    const edges = (A.edges || []).map(e => {
+      const a = N[e[0]], b = N[e[1]];
+      if (!a || !b) return '';
+      const dx = b.cx - a.cx, dy = b.cy - a.cy;
+      let x1, y1, x2, y2;
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        const s = dx >= 0 ? 1 : -1;
+        x1 = a.cx + s * HALF; y1 = a.cy; x2 = b.cx - s * HALF; y2 = b.cy;
+      } else {
+        const s = dy >= 0 ? 1 : -1;
+        x1 = a.cx; y1 = a.cy + s * HALF; x2 = b.cx; y2 = b.cy - s * HALF;
+      }
+      const dash = e[3] === 'dash' ? ' stroke-dasharray="5 4"' : '';
+      const line = '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 +
+        '" class="ad-edge" marker-end="url(#ad-arrow)"' + dash + '/>';
+      let label = '';
+      if (e[2]) {
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, w = e[2].length * 6.0 + 8;
+        label = '<rect x="' + (mx - w / 2) + '" y="' + (my - 8) + '" width="' + w +
+          '" height="15" rx="4" class="ad-elbg"/>' +
+          '<text x="' + mx + '" y="' + (my + 2.6) + '" class="ad-elabel">' + esc(e[2]) + '</text>';
+      }
+      return line + label;
+    }).join('');
+
+    const tiles = A.nodes.map(n => {
+      const o = N[n[0]];
+      const labels = wrapLabel(o.label, 16).map((ln, i) =>
+        '<text x="' + o.cx + '" y="' + (o.cy + HALF + 15 + i * 12.5) + '" class="ad-label">' + esc(ln) + '</text>'
+      ).join('');
+      return '<rect x="' + (o.cx - HALF) + '" y="' + (o.cy - HALF) + '" width="' + CHIP +
+          '" height="' + CHIP + '" rx="13" fill="' + o.color + '"/>' +
+        '<text x="' + o.cx + '" y="' + (o.cy + 1) + '" class="ad-ic">' + o.icon + '</text>' +
+        labels;
+    }).join('');
+
+    return '<div class="section-label">Implemented architecture</div>' +
+      '<p class="arch-caption">A customized view of the system we shipped for this engagement — the components and how requests and data flow between them.</p>' +
+      '<div class="arch-figure"><svg viewBox="0 0 ' + W + ' ' + H + '" class="arch-svg" ' +
+        'role="img" aria-label="Architecture diagram for ' + esc(c.title) + '" preserveAspectRatio="xMidYMid meet">' +
+        '<defs><marker id="ad-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+          '<path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>' +
+        edges + tiles +
+      '</svg></div>';
+  }
+
+  // Locally-stored client portraits (royalty-free, non-famous people) for the
+  // feedback section, keyed by case id. Falls back to an initials badge if a
+  // photo can't load.
+  const PORTRAITS = {
+    'medplum-fhir':        'img/client-medplum-fhir.jpg',
+    'formance-ledger':     'img/client-formance-ledger.jpg',
+    'fleetbase-logistics': 'img/client-fleetbase-logistics.jpg',
+    'estated-proptech':    'img/client-estated-proptech.jpg',
+    'duffel-travel':       'img/client-duffel-travel.jpg',
+    'boost-insurtech':     'img/client-boost-insurtech.jpg',
+    'heidihealth-ai':      'img/client-heidihealth-ai.jpg',
+    'harvey-legal':        'img/client-harvey-legal.jpg',
+    'lago-billing':        'img/client-lago-billing.jpg',
+    'hatchways-proptech':  'img/client-hatchways-proptech.jpg',
+    'sojern-hospitality':  'img/client-sojern-hospitality.jpg'
+  };
+
+  function initialsOf(name){
+    return String(name).replace(/^(Dr\.|Captain|Mr\.|Mrs\.|Ms\.)\s+/i, '')
+      .split(/\s+/).map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
+  }
+
+  function render(){
+    const id = new URLSearchParams(location.search).get('id');
+    const idx = CASE_DATA.findIndex(x => x.id === id);
+    const c = CASE_DATA[idx];
+    const root = document.getElementById('case-root');
+
+    if (!c){
+      document.getElementById('d-tag').textContent = 'Not found';
+      document.getElementById('d-title').textContent = 'Case study not found';
+      document.getElementById('d-summary').textContent = 'Please pick a case study from the list.';
+      root.innerHTML = '<p style="text-align:center"><a class="btn btn-primary" href="case-study.html">← Back to all case studies</a></p>';
+      return;
+    }
+
+    const num = String(idx + 1).padStart(2, '0');
+    document.title = c.title + ' — Lanceflows';
+    document.getElementById('d-tag').textContent = 'Case ' + num + ' · ' + c.category;
+    document.getElementById('d-title').textContent = c.title;
+    document.getElementById('d-summary').textContent = c.description;
+
+    const areaChips = (c.serviceAreas || []).map(a => '<span class="d-chip soft">' + esc(a) + '</span>').join('');
+    document.getElementById('d-meta').innerHTML =
+      '<span class="d-chip">🛠 ' + esc(c.ourRole) + '</span>' +
+      '<a class="d-chip" href="' + esc(c.liveUrl) + '" target="_blank" rel="noopener">↗ ' + esc(domain(c.liveUrl)) + '</a>' +
+      areaChips;
+
+    const xList   = c.challenges.map(t => '<li>' + esc(t) + '</li>').join('');
+    const ckList  = c.keyImplementations.map(t => '<li>' + esc(t) + '</li>').join('');
+    const tech    = c.techStack.map(t => '<span class="pill">' + esc(t) + '</span>').join('');
+    const metrics = c.resultMetrics.map(m => '<div class="metric"><span>' + esc(m) + '</span></div>').join('');
+    const before  = c.beforeWorkflow.map(step).join('');
+    const after   = c.afterWorkflow.map(step).join('');
+    const t       = c.testimonial;
+    const author  = t.person + (t.role ? ', ' + t.role : '') + (t.company ? ' at ' + t.company : '');
+    const initials = initialsOf(t.person);
+    const portrait = PORTRAITS[c.id];
+    // Portrait photo with an automatic initials-badge fallback if it can't load.
+    const avatar = portrait
+      ? '<img class="cq-avatar" src="' + esc(portrait) + '" alt="Portrait of ' + esc(t.person) + '" loading="lazy" ' +
+        'onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'cq-avatar cq-fallback\',textContent:\'' + initials + '\'}))">'
+      : '<span class="cq-avatar cq-fallback">' + initials + '</span>';
+
+    root.innerHTML =
+      '<article class="case">' +
+        '<a class="back-link in-body" href="case-study.html">← All case studies</a>' +
+        '<div class="section-label">Overview</div>' +
+        '<p class="case-overview">' + esc(c.description) + '</p>' +
+        '<div class="section-label">Challenge &amp; solution</div>' +
+        '<div class="case-grid">' +
+          '<div><div class="col-label">The challenge</div><p>' + esc(c.problem) + '</p><ul class="x-list">' + xList + '</ul></div>' +
+          '<div><div class="col-label">Our solution</div><p>' + esc(c.solution) + '</p><ul class="check-list">' + ckList + '</ul></div>' +
+        '</div>' +
+        archDiagram(c) +
+        '<div class="section-label">Technology stack</div>' +
+        '<div class="pill-wrap">' + tech + '</div>' +
+        '<div class="section-label">Verified results &amp; achievements</div>' +
+        '<div class="metrics">' + metrics + '</div>' +
+        '<div class="section-label">Operational business value</div>' +
+        '<div class="outcomes">' +
+          '<div class="outcome"><b>Direct value added</b><span>' + esc(c.businessValue) + '</span></div>' +
+          '<div class="outcome"><b>Why it matters</b><span>' + esc(c.whyThisMatters) + '</span></div>' +
+        '</div>' +
+        '<div class="section-label">Workflow impact mapping</div>' +
+        '<div class="flow-wrap">' +
+          '<div class="flow before"><h4>⚠ Before — manual bottleneck flow</h4>' + before + '</div>' +
+          '<div class="flow after"><h4>✓ After — automated optimized flow</h4>' + after + '</div>' +
+        '</div>' +
+        '<blockquote class="case-quote">' + avatar +
+          '<div class="cq-body">“' + esc(t.text) + '”<footer>— ' + esc(author) + '</footer></div>' +
+        '</blockquote>' +
+      '</article>';
+  }
+
+  render();
+</script>
+</body>
+</html>
