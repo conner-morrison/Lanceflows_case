@@ -17,8 +17,8 @@
 <!-- ===================== HEADER ===================== -->
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="Lanceflows home">
-      <img class="logo-img" src="company_logo.png" alt="Lanceflows logo" />
+    <a class="brand" href="#top">
+      <img class="logo-img" src="company_logo.png" alt="" />
       <span class="brand-text">
         <span class="brand-name">Lance<b>flows</b></span>
         <span class="brand-tag">Software Engineering &amp; AI Services</span>
@@ -36,6 +36,8 @@
 </header>
 
 <main id="top">
+
+  <h1 class="sr-only">Lanceflows — Software Engineering &amp; AI Services. Talent, in flow.</h1>
 
   <!-- ===================== HERO SLIDER ===================== -->
   <section class="hero">
@@ -65,7 +67,7 @@
             </div> -->
           </div>
           <!-- Slide 2: art-directed infographic banner — wide / tablet / portrait variants -->
-          <div class="slide slide-2" data-r-d="16/9" data-r-t="980/1086" data-r-m="454/1086">
+          <div class="slide slide-2" data-r-d="16/9" data-r-t="4/3" data-r-m="9/16">
             <picture class="slide-pic">
               <source media="(max-width:560px)" srcset="img/hero_slider2_3.png" />
               <source media="(max-width:900px)" srcset="img/hero_slider2_2.png" />
@@ -83,7 +85,7 @@
         </div>
         <button class="arrow prev" aria-label="Previous slide">‹</button>
         <button class="arrow next" aria-label="Next slide">›</button>
-        <div class="dots" role="tablist"></div>
+        <div class="dots" aria-label="Choose slide"></div>
       </div>
 
       <!-- Stats -->
@@ -211,18 +213,25 @@
           <input type="hidden" name="_captcha" value="false" />
           <!-- honeypot: bots fill this, humans never see it -->
           <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0" />
-          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" placeholder="Your name" required /></div>
-          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@email.com" required /></div>
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required /></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required /></div>
           <div class="field"><label for="msg">Message</label><textarea id="msg" name="message" rows="4" placeholder="How can we help?" required></textarea></div>
           <button class="btn btn-primary" type="submit">Send message</button>
           <p id="form-note" style="margin-top:12px;font-weight:600;display:none">Thanks! We'll be in touch soon. ✓</p>
         </form>
-        <ul class="contact-info">
-          <li><span class="ic">✉️</span><div><strong>Email</strong><small>admin@lanceflows.com</small></div></li>
-          <!-- <li><span class="ic">📞</span><div><strong>Phone</strong><small>+1 (000) 000-0000</small></div></li> -->
-          <li><span class="ic">📍</span><div><strong>Office</strong><small>Austin, Texas</small></div></li>
-          <li><span class="ic">⏰</span><div><strong>Hours</strong><small>Mon–Fri, 9:00–18:00</small></div></li>
-        </ul>
+        <div class="contact-side">
+          <ul class="contact-info">
+            <li><span class="ic">✉️</span><div><strong>Email</strong><small>admin@lanceflows.com</small></div></li>
+            <!-- <li><span class="ic">📞</span><div><strong>Phone</strong><small>+1 (000) 000-0000</small></div></li> -->
+            <li><span class="ic">📍</span><div><strong>Office</strong><small>Austin, Texas</small></div></li>
+            <li><span class="ic">⏰</span><div><strong>Hours</strong><small>Mon–Fri, 9:00–18:00</small></div></li>
+          </ul>
+          <div class="book-call">
+            <strong>Prefer to talk live?</strong>
+            <p>Pick a time that works for you and book a free intro call.</p>
+            <a class="btn btn-primary" href="https://cal.com/lanceflows" target="_blank" rel="noopener">Book an appointment</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -239,9 +248,9 @@
         <p>Talent, in flow. We help clients and talented people invest their strengths and earn the most — seamlessly.</p>
       </div>
       <div class="foot-cols">
-        <div class="foot-col"><h4>Company</h4><a href="services.html">Services</a><a href="case-study.html">Case Studies</a><a href="#about">About us</a><a href="#why">Why Lanceflows</a><a href="#contact">Contact</a></div>
-        <div class="foot-col"><h4>For clients</h4><a href="#why" data-why-tab="clients">Hire talent</a><a href="#contact">Request a quote</a></div>
-        <div class="foot-col"><h4>For talent</h4><a href="#why" data-why-tab="employees">What's good?</a><a href="#contact">Join us</a></div>
+        <div class="foot-col"><h2>Company</h2><a href="services.html">Services</a><a href="case-study.html">Case Studies</a><a href="#about">About us</a><a href="#why">Why Lanceflows</a><a href="#contact">Contact</a></div>
+        <div class="foot-col"><h2>For clients</h2><a href="#why" data-why-tab="clients">Hire talent</a><a href="#contact">Request a quote</a></div>
+        <div class="foot-col"><h2>For talent</h2><a href="#why" data-why-tab="employees">What's good?</a><a href="#contact">Join us</a></div>
       </div>
     </div>
     <div class="foot-bottom">
@@ -352,6 +361,7 @@
       note.style.display = 'block';
       form.reset();
     } catch (err) {
+      console.error('Contact form / FormSubmit error:', err.message);
       note.textContent = 'Sorry — something went wrong. Please email admin@lanceflows.com directly.';
       note.style.color = '#c0455f';
       note.style.display = 'block';
@@ -360,5 +370,6 @@
     }
   });
 </script>
+<script src="nav.js"></script>
 </body>
 </html>
