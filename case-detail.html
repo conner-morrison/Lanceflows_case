@@ -17,8 +17,8 @@
 <!-- ===================== HEADER ===================== -->
 <header>
   <div class="wrap nav">
-    <a class="brand" href="index.html" aria-label="Lanceflows home">
-      <img class="logo-img" src="company_logo.png" alt="Lanceflows logo" />
+    <a class="brand" href="index.html">
+      <img class="logo-img" src="company_logo.png" alt="" />
       <span class="brand-text">
         <span class="brand-name">Lance<b>flows</b></span>
         <span class="brand-tag">Software Engineering &amp; AI Services</span>
@@ -75,9 +75,9 @@
         <p>Talent, in flow. We help clients and talented people invest their strengths and earn the most — seamlessly.</p>
       </div>
       <div class="foot-cols">
-        <div class="foot-col"><h4>Company</h4><a href="services.html">Services</a><a href="case-study.html">Case Studies</a><a href="index.html#about">About us</a><a href="index.html#contact">Contact</a></div>
-        <div class="foot-col"><h4>For clients</h4><a href="index.html#why-clients">Hire talent</a><a href="index.html#contact">Request a quote</a></div>
-        <div class="foot-col"><h4>For talent</h4><a href="index.html#why-talent">What's good?</a><a href="index.html#contact">Join us</a></div>
+        <div class="foot-col"><h2>Company</h2><a href="services.html">Services</a><a href="case-study.html">Case Studies</a><a href="index.html#about">About us</a><a href="index.html#contact">Contact</a></div>
+        <div class="foot-col"><h2>For clients</h2><a href="index.html#why-clients">Hire talent</a><a href="index.html#contact">Request a quote</a></div>
+        <div class="foot-col"><h2>For talent</h2><a href="index.html#why-talent">What's good?</a><a href="index.html#contact">Join us</a></div>
       </div>
     </div>
     <div class="foot-bottom">
@@ -217,7 +217,7 @@
     document.title = c.title + ' — Lanceflows';
     document.getElementById('d-tag').textContent = 'Case ' + num + ' · ' + c.category;
     document.getElementById('d-title').textContent = c.title;
-    document.getElementById('d-summary').textContent = c.description;
+    // hero summary intentionally left empty — the description leads the Overview section below
 
     const areaChips = (c.serviceAreas || []).map(a => '<span class="d-chip soft">' + esc(a) + '</span>').join('');
     document.getElementById('d-meta').innerHTML =
@@ -248,8 +248,8 @@
         '<p class="case-overview">' + esc(c.description) + '</p>' +
         '<div class="section-label">Challenge &amp; solution</div>' +
         '<div class="case-grid">' +
-          '<div><div class="col-label">The challenge</div><p>' + esc(c.problem) + '</p><ul class="x-list">' + xList + '</ul></div>' +
-          '<div><div class="col-label">Our solution</div><p>' + esc(c.solution) + '</p><ul class="check-list">' + ckList + '</ul></div>' +
+          '<div class="cs-card cs-challenge"><div class="col-label">The challenge</div><p>' + esc(c.problem) + '</p><ul class="x-list">' + xList + '</ul></div>' +
+          '<div class="cs-card cs-solution"><div class="col-label">Our solution</div><p>' + esc(c.solution) + '</p><ul class="check-list">' + ckList + '</ul></div>' +
         '</div>' +
         archDiagram(c) +
         '<div class="section-label">Technology stack</div>' +
@@ -263,8 +263,8 @@
         '</div>' +
         '<div class="section-label">Workflow impact mapping</div>' +
         '<div class="flow-wrap">' +
-          '<div class="flow before"><h4>⚠ Before — manual bottleneck flow</h4>' + before + '</div>' +
-          '<div class="flow after"><h4>✓ After — automated optimized flow</h4>' + after + '</div>' +
+          '<div class="flow before"><h2>⚠ Before — manual bottleneck flow</h2>' + before + '</div>' +
+          '<div class="flow after"><h2>✓ After — automated optimized flow</h2>' + after + '</div>' +
         '</div>' +
         '<blockquote class="case-quote">' + avatar +
           '<div class="cq-body">“' + esc(t.text) + '”<footer>— ' + esc(author) + '</footer></div>' +
@@ -274,5 +274,6 @@
 
   render();
 </script>
+<script src="nav.js"></script>
 </body>
 </html>
